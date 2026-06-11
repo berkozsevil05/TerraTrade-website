@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -23,11 +24,43 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="tr">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        
+        {/* Dil Seçim Kutusu */}
+        <div 
+          id="google_translate_element" 
+          style={{ 
+            position: 'fixed', 
+            bottom: '20px', 
+            right: '20px', 
+            zIndex: 9999,
+            backgroundColor: '#fff',
+            padding: '5px',
+            borderRadius: '4px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}
+        ></div>
+
+        {children}
+
+        {/* Listeye açıkça Türkçe (tr) dilini de ekledik */}
+        <Script id="google-translate-init" strategy="afterInteractive">
+          {`
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'auto', // Sitenin dilini otomatik algıla dedik, böylece 'tr' listeye eklenebilecek
+                includedLanguages: 'tr,en,de,fr,es', // Listede Türkçenin de görünmesini sağladık
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+              }, 'google_translate_element');
+            }
+          `}
+        </Script>
+        <Script 
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" 
+          strategy="afterInteractive" 
+        />
+      </body>
     </html>
   );
 }
